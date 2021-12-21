@@ -6,8 +6,7 @@ const App = () => {
   return (
     <div className="App">
       <h1>Summary constructior</h1>
-      <h3>Step 1: Основаня информация</h3>
-      <Step1></Step1>
+      <Step1 />
     </div>
   );
 }
