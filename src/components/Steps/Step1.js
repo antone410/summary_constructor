@@ -7,13 +7,17 @@ class Step1 extends React.Component {
         formWarningVisible: false,
         firstNameValue: '',
         secondNameValue: '',
-        cityValue: ''
-
+        cityValue: '',
+        date: ''
     }
 
 
     nextButtonHandler() {
-        this.state.firstNameValue && this.state.secondNameValue && this.state.cityValue ? this.setState({ formWarningVisible: false }) : this.setState({ formWarningVisible: true })
+        this.state.firstNameValue &&
+            this.state.secondNameValue &&
+            this.state.cityValue &&
+            this.state.date ?
+            this.setState({ formWarningVisible: false }) : this.setState({ formWarningVisible: true })
     }
 
     render() {
@@ -47,9 +51,16 @@ class Step1 extends React.Component {
                         placeholder="введите город"
                         onChange={event => this.setState({ cityValue: event.target.value })}
                     />
-                    {/* TODO: fix data input   */}
+
                     <label htmlFor='date'>Дата рождения:</label>
-                    <input type='date' id='date' name="date" />
+                    <input
+                        type='date'
+                        id='date'
+                        value={this.state.date}
+                        name="date"
+                        onChange={event => this.setState({ date: event.target.value })} />
+
+                    {/* TODO: add category PHOTO in future */}
                 </form>
 
                 {this.state.formWarningVisible && <p className='form__warning'>Заполните обязательные поля!</p>}
