@@ -4,7 +4,7 @@ const Step2 = () => {
     const [workExperiance, setWorkExperiance] = useState([])
 
     const addWorkExperiace = () => {
-        setWorkExperiance([...workExperiance, { id: workExperiance.length, workPlace: '', position: '', startWork: '', finishWork: '' }])
+        setWorkExperiance([...workExperiance, { id: workExperiance.length, workplace: '', position: '', start: '', finish: '' }])
     }
 
     const removeWorkExperiace = (id) => {
@@ -15,17 +15,29 @@ const Step2 = () => {
         }
         setWorkExperiance(copyWorkExperiance)
     }
+
+    const changeDataHandler = (event, id) => {
+        console.log(event.target.name)
+        const key = event.target.name
+        const copyWorkExperiance = workExperiance.map(
+            element => element.id === id ? { ...element, [key]: event.target.value } : element
+        )
+        setWorkExperiance(copyWorkExperiance)
+    }
+
     return (
         <div>
             <h3>Шаг 2: Опыт работы</h3>
             {workExperiance.map(el => {
 
                 return <div key={el.id} className="step__form">
-                    <label htmlFor="workPlace">Место работы:</label>
+                    <label htmlFor="workplace">Место работы:</label>
                     <input
                         placeholder="введите место работы"
-                        id="workPlace"
+                        id="workplace"
                         name="workplace"
+                        value={el.workplace}
+                        onChange={event => changeDataHandler(event, el.id)}
                     />
 
                     <label htmlFor="position">Должность:</label>
@@ -33,32 +45,26 @@ const Step2 = () => {
                         placeholder="введите должность"
                         id="position"
                         name="position"
+                        value={el.position}
+                        onChange={event => changeDataHandler(event, el.id)}
                     />
 
-                    <label htmlFor="startWork">Дата начала работы:</label>
+                    <label htmlFor="start">Дата начала работы:</label>
                     <input
                         type='month'
-                        id="startWork"
-                        name="startWork"
-                        value={el.startWork}
-                        onChange={event => setWorkExperiance(
-                            workExperiance.map(
-                                element => element.id === el.id ? { ...element, startWork: event.target.value } : element
-                            )
-                        )}
+                        id="start"
+                        name="start"
+                        value={el.start}
+                        onChange={event => changeDataHandler(event, el.id)}
                     />
 
-                    <label htmlFor="finishWork">Дата окончания работы:</label>
+                    <label htmlFor="finish">Дата окончания работы:</label>
                     <input
                         type='month'
-                        id="finishWork"
-                        value={el.finishWork}
-                        onChange={event => setWorkExperiance(
-                            workExperiance.map(
-                                element => element.id === el.id ? { ...element, finishWork: event.target.value } : element
-                            )
-                        )}
-                        name="finishWork"
+                        id="finish"
+                        value={el.finish}
+                        onChange={event => changeDataHandler(event, el.id)}
+                        name="finish"
                     />
 
                     <button onClick={() => removeWorkExperiace(el.id)}>Удалить место работы</button>
