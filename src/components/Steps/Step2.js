@@ -1,25 +1,26 @@
 import React, { useState } from "react";
 
 const Step2 = () => {
-    const [workExperiance, setWorkExperiance] = useState([
-        { id: 0, workPlace: '', position: '', startWork: '', finishWork: '' }
-    ])
+    const [workExperiance, setWorkExperiance] = useState([])
 
     const addWorkExperiace = () => {
         setWorkExperiance([...workExperiance, { id: workExperiance.length, workPlace: '', position: '', startWork: '', finishWork: '' }])
     }
 
-    const removeWorkExperiace = (event, id) => {
-        // FIXME: this method is incorrect!
-        event.preventDefault()
-        setWorkExperiance(workExperiance.splice(id, 1))
+    const removeWorkExperiace = (id) => {
+        const copyWorkExperiance = [...workExperiance]
+        copyWorkExperiance.splice(id, 1)
+        for (let i = 0; i < copyWorkExperiance.length; i++) {
+            copyWorkExperiance[i].id = i
+        }
+        setWorkExperiance(copyWorkExperiance)
     }
     return (
         <div>
             <h3>Шаг 2: Опыт работы</h3>
             {workExperiance.map(el => {
 
-                return <form key={el.id} className="step__form">
+                return <div key={el.id} className="step__form">
                     <label htmlFor="workPlace">Место работы:</label>
                     <input
                         placeholder="введите место работы"
@@ -60,10 +61,8 @@ const Step2 = () => {
                         name="finishWork"
                     />
 
-                    <button onClick={(event) => removeWorkExperiace(event, el.id)}>Удалить место работы</button>
-
-
-                </form>
+                    <button onClick={() => removeWorkExperiace(el.id)}>Удалить место работы</button>
+                </div>
             })}
 
             <button onClick={addWorkExperiace}>Добавить место работы</button>
