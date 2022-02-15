@@ -1,75 +1,68 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 
-class Step1 extends React.Component {
+const Step1 = () => {
 
-    state = {
-        formWarningVisible: false,
-        firstNameValue: '',
-        secondNameValue: '',
-        cityValue: '',
-        date: ''
+    const dispatch = useDispatch()
+    const [formWarningVisible, setFormWarningVisible] = useState(false)
+
+    const state = useSelector(state => state.step1Reducer)
+    const checkForm = () => {
+       if (state.name && state.surname && state.city && state.date) {
+           setFormWarningVisible(false)
+           dispatch({type: 'switchToStep2'})
+        }else {
+            setFormWarningVisible(true)
+        }
     }
+    return (
+        <div>
+            <h3>Шаг 1: Основаня информация</h3>
+            <div className='step__form'>
+                <label htmlFor='name'>Имя:</label>
+                <input
+                    id='name'
+                    name='name'
+                    placeholder="введите имя"
+                    value={useSelector(state => state.step1Reducer.name)}
+                    onChange={event => dispatch({ type: 'change', event })}
+                />
 
+                <label htmlFor='surname'>Фамилия: </label>
+                <input
+                    id='surname'
+                    name='surname'
+                    placeholder="введите фамилию"
+                    value={useSelector(state => state.step1Reducer.surname)}
+                    onChange={event => dispatch({ type: 'change', event })}
+                />
 
-    nextButtonHandler() {
-        this.state.firstNameValue &&
-            this.state.secondNameValue &&
-            this.state.cityValue &&
-            this.state.date ?
-            this.setState({ formWarningVisible: false }) : this.setState({ formWarningVisible: true })
-    }
+                <label htmlFor='city'>Город:</label>
+                <input
+                    id='city'
+                    name='city'
+                    placeholder="введите город"
+                    value={useSelector(state => state.step1Reducer.city)}
+                    onChange={event => dispatch({ type: 'change', event })}
+                />
 
-    render() {
-        return (
-            <div>
-                <h3>Шаг  1: Основаня информация</h3>
-                <form className='step__form'>
-                    <label htmlFor='firstName'>Имя: </label>
-                    <input
-                        id='firstName'
-                        value={this.state.firstNameValue}
-                        name='firstName'
-                        placeholder="введите имя"
-                        onChange={event => this.setState({ firstNameValue: event.target.value })}
-                    />
-
-                    <label htmlFor='secondName'>Фамилия: </label>
-                    <input
-                        id='secondName'
-                        value={this.state.secondNameValue}
-                        name='secondName'
-                        placeholder="введите фамилию"
-                        onChange={event => this.setState({ secondNameValue: event.target.value })}
-                    />
-
-                    <label htmlFor='city'>Город: </label>
-                    <input
-                        id='city'
-                        value={this.state.cityValue}
-                        name='city'
-                        placeholder="введите город"
-                        onChange={event => this.setState({ cityValue: event.target.value })}
-                    />
-
-                    <label htmlFor='date'>Дата рождения:</label>
-                    <input
-                        type='date'
-                        id='date'
-                        value={this.state.date}
-                        name="date"
-                        onChange={event => this.setState({ date: event.target.value })} />
-
-                    {/* TODO: add category PHOTO in future */}
-                </form>
-
-                {this.state.formWarningVisible && <p className='form__warning'>Заполните обязательные поля!</p>}
-
-                <button onClick={this.nextButtonHandler.bind(this)}>Далее</button>
-            </div >
-        )
-    }
-
+                <label htmlFor='date'>Дата рождения:</label>
+                <input
+                    type='date'
+                    id='date'
+                    name="date"
+                    value={useSelector(state => state.step1Reducer.date)}
+                    onChange={event => dispatch({ type: 'change', event })} 
+                />
+                {/* TODO: add category PHOTO in future */}
+            </div>
+            <button>Назад</button>
+            <button onClick={checkForm}>Далее</button>
+            {formWarningVisible && <p className='form__warning'>Заполните обязательные поля!</p>}
+        </div >
+    )
 }
+
 
 export default Step1

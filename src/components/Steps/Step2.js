@@ -1,34 +1,24 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const Step2 = () => {
-    const [workExperiance, setWorkExperiance] = useState([])
 
-    const addWorkExperiace = () => {
-        setWorkExperiance([...workExperiance, { id: workExperiance.length, workplace: '', position: '', start: '', finish: '' }])
-    }
-
-    const removeWorkExperiace = (id) => {
-        const copyWorkExperiance = [...workExperiance]
-        copyWorkExperiance.splice(id, 1)
-        for (let i = 0; i < copyWorkExperiance.length; i++) {
-            copyWorkExperiance[i].id = i
-        }
-        setWorkExperiance(copyWorkExperiance)
-    }
-
-    const changeDataHandler = (event, id) => {
-        console.log(event.target.name)
-        const key = event.target.name
-        const copyWorkExperiance = workExperiance.map(
-            element => element.id === id ? { ...element, [key]: event.target.value } : element
-        )
-        setWorkExperiance(copyWorkExperiance)
+    const dispatch = useDispatch()
+    const state = useSelector(state => state.step2Reducer)
+    const [formWarningVisible, setFormWarningVisible] = useState(false)
+    const checkForm = () => {
+        let checkStatus = false
+        state.forEach(element => {
+            for (let key in element) if (!element[key] && key !== 'id') checkStatus = true
+        });
+        setFormWarningVisible(checkStatus)
+        if (!checkStatus) dispatch({type: 'switchToStep3'})
     }
 
     return (
         <div>
             <h3>Шаг 2: Опыт работы</h3>
-            {workExperiance.map(el => {
+            {useSelector(state => state.step2Reducer).map(el => {
 
                 return <div key={el.id} className="step__form">
                     <label htmlFor="workplace">Место работы:</label>
@@ -37,7 +27,7 @@ const Step2 = () => {
                         id="workplace"
                         name="workplace"
                         value={el.workplace}
-                        onChange={event => changeDataHandler(event, el.id)}
+                        onChange={event => dispatch({type: 'changeDataHandler' ,event, id: el.id})}
                     />
 
                     <label htmlFor="position">Должность:</label>
@@ -46,7 +36,7 @@ const Step2 = () => {
                         id="position"
                         name="position"
                         value={el.position}
-                        onChange={event => changeDataHandler(event, el.id)}
+                        onChange={event => dispatch({type: 'changeDataHandler' ,event, id: el.id})}
                     />
 
                     <label htmlFor="start">Дата начала работы:</label>
@@ -55,7 +45,7 @@ const Step2 = () => {
                         id="start"
                         name="start"
                         value={el.start}
-                        onChange={event => changeDataHandler(event, el.id)}
+                        onChange={event => dispatch({type: 'changeDataHandler' ,event, id: el.id})}
                     />
 
                     <label htmlFor="finish">Дата окончания работы:</label>
@@ -63,18 +53,19 @@ const Step2 = () => {
                         type='month'
                         id="finish"
                         value={el.finish}
-                        onChange={event => changeDataHandler(event, el.id)}
+                        onChange={event => dispatch({type: 'changeDataHandler' ,event, id: el.id})}
                         name="finish"
                     />
 
-                    <button onClick={() => removeWorkExperiace(el.id)}>Удалить место работы</button>
+                    <button onClick={() => dispatch({type: 'removeWorkExperiace', id: el.id})}>
+                        Удалить место работы
+                    </button>
                 </div>
             })}
-
-            <button onClick={addWorkExperiace}>Добавить место работы</button>
-
             <button>Назад</button>
-            <button onClick={() => console.log(workExperiance)}>Далее</button>
+            <button onClick={() => checkForm()}>Далее</button>
+            <button onClick={() => dispatch({type: 'addWorkPlace'})}>Добавить место работы</button>
+            {formWarningVisible && <p className='form__warning'>Заполните обязательные поля!</p>}
         </div>
     )
 }
