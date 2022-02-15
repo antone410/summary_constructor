@@ -6,9 +6,9 @@ const initialState = {
 }
 
 const Step1Reducer = (state = initialState, action) => {
+    const key = action.event.target.name
     switch (action.type) {
         case 'change':
-            const key = action.event.target.name
             return { ...state, [key]: action.event.target.value }
         case 'check':
             return (state.name && state.surname && state.city && state.date) ?
